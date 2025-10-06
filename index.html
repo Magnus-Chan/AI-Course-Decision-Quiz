@@ -1,276 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CFTE Course Recommender Quiz</title>
-<script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com/)"></script>
-<link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com/)">
-<link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com/)" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
-<style>
-body {
-font-family: 'Poppins', sans-serif;
-background-color: #f0f0f0; /* Lighter grey background */
-}
-.font-lora {
-font-family: 'Lora', serif;
-}
-.cfte-red {
-background-color: #A90C0F;
-}
-.cfte-red-text {
-color: #A90C0F;
-}
-.cfte-red-border {
-border-color: #A90C0F;
-}
-.quiz-container {
-transition: opacity 0.5s ease-in-out;
-}
-.question-card, .result-card {
-animation: fadeIn 0.7s ease-in-out;
-}
-.answer-option {
-transition: all 0.3s ease;
-}
-.answer-option:hover {
-transform: translateY(-5px);
-box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-border-color: #A90C0F;
-}
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(20px); }
-to { opacity: 1; transform: translateY(0); }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFTE Course Recommender Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f0f0; /* Lighter grey background */
+        }
+        .font-lora {
+            font-family: 'Lora', serif;
+        }
+        .cfte-red {
+            background-color: #A90C0F;
+        }
+        .cfte-red-text {
+            color: #A90C0F;
+        }
+        .cfte-red-border {
+            border-color: #A90C0F;
+        }
+        .quiz-container {
+            transition: opacity 0.5s ease-in-out;
+        }
+        .question-card, .result-card {
+            animation: fadeIn 0.7s ease-in-out;
+        }
+        .answer-option {
+            transition: all 0.3s ease;
+        }
+        .answer-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #A90C0F;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-```
-<div id="quiz" class="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div id="quiz" class="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+        
+        <header class="cfte-red p-6 text-white text-center">
+            <h1 class="text-3xl md:text-4xl font-lora font-bold">Find Your Perfect AI Course</h1>
+            <p class="mt-2 text-base font-light">Let's find the programme that aligns with your professional goals.</p>
+        </header>
 
-    <header class="cfte-red p-6 text-white text-center">
-        <h1 class="text-3xl md:text-4xl font-lora font-bold">Find Your Perfect AI Course</h1>
-        <p class="mt-2 text-base font-light">Let's find the programme that aligns with your professional goals.</p>
-    </header>
-
-    <main class="p-6 md:p-10 bg-gray-50">
-        <!-- Start Screen -->
-        <div id="start-screen" class="text-center">
-            <h2 class="font-lora text-2xl text-gray-800 mb-4">Ready to Begin?</h2>
-            <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto">This short quiz will help us recommend the ideal CFTE course for your career advancement in AI.</p>
-            <button id="start-btn" class="cfte-red hover:bg-red-900 text-white font-bold py-3 px-10 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                Start Quiz
-            </button>
-        </div>
-
-        <!-- Quiz Questions -->
-        <div id="quiz-screen" class="hidden quiz-container">
-            <div id="question-container" class="mb-6">
-                <!-- Question will be injected here -->
-            </div>
-            <div id="progress-container" class="flex items-center justify-between text-sm text-gray-500">
-                <span>Progress</span>
-                <div class="w-full mx-4 bg-gray-200 rounded-full h-2">
-                    <div id="progress-bar" class="cfte-red h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-                <span id="progress-text">0%</span>
-            </div>
-        </div>
-
-        <!-- Result Screen -->
-        <div id="result-screen" class="hidden">
-            <!-- Result will be injected here -->
-        </div>
-    </main>
-</div>
-
-<script>
-    const startBtn = document.getElementById('start-btn');
-    const startScreen = document.getElementById('start-screen');
-    const quizScreen = document.getElementById('quiz-screen');
-    const resultScreen = document.getElementById('result-screen');
-    const questionContainer = document.getElementById('question-container');
-    const progressBar = document.getElementById('progress-bar');
-    const progressText = document.getElementById('progress-text');
-
-    // --- QUIZ DATA ---
-    const quizData = [
-        {
-            question: "When faced with a new technology, what is your first instinct?",
-            answers: [
-                { text: "Experiment with it, see what I can build, and push its limits.", course: "genai360" },
-                { text: "Analyse how it can optimise processes and create value in my specific field.", course: "aiFinance" },
-                { text: "Understand its potential and risks to make strategic decisions for my organisation.", course: "aiLiteracy" }
-            ]
-        },
-        {
-            question: "How do you prefer to learn new concepts?",
-            answers: [
-                { text: "By diving into the technical details to see how things work from the ground up.", course: "genai360" },
-                { text: "Through real-world case studies and applications within my industry.", course: "aiFinance" },
-                { text: "By grasping the big picture, strategic implications, and business impact.", course: "aiLiteracy" }
-            ]
-        },
-        {
-            question: "How would you describe your current technical expertise?",
-            answers: [
-                { text: "I have some programming experience and am comfortable with technical concepts.", course: "genai360" },
-                { text: "I have strong domain knowledge (e.g., in finance) but am not a programmer.", course: "aiFinance" },
-                { text: "I'm a non-technical professional focused on strategy, leadership, or operations.", course: "aiLiteracy" }
-            ]
-        },
-        {
-            question: "Which of these sounds like the most engaging project for you?",
-            answers: [
-                { text: "Fine-tuning a Large Language Model for a novel creative or analytical task.", course: "genai360" },
-                { text: "Developing an AI-driven model for risk assessment or algorithmic trading.", course: "aiFinance" },
-                { text: "Creating a company-wide framework for the ethical implementation of AI.", course: "aiLiteracy" }
-            ]
-        },
-         {
-            question: "What is your primary goal for learning about AI?",
-            answers: [
-                { text: "To gain a deep, hands-on understanding of the latest AI models.", course: "genai360" },
-                { text: "To master the application of AI to solve challenges in the financial sector.", course: "aiFinance" },
-                { text: "To become a confident, AI-aware leader who can drive innovation.", course: "aiLiteracy" }
-            ]
-        },
-        {
-            question: "Looking ahead, what role do you see yourself playing in your company's AI journey?",
-            answers: [
-                { text: "The hands-on builder or innovator creating new AI-powered tools.", course: "genai360" },
-                { text: "The domain expert who identifies and implements high-value AI use cases in finance.", course: "aiFinance" },
-                { text: "The strategic leader who guides the company's AI vision and governance.", course: "aiLiteracy" }
-            ]
-        }
-    ];
-
-    const courseResults = {
-        genai360: {
-            title: "Generative AI in Financial Services",
-            description: "Your profile suggests a strong interest in the technical foundations and hands-on application of AI. This course will give you the deep, practical knowledge needed to build and innovate with generative models.",
-            link: "<https://courses.cfte.education/generative-ai-360-for-financial-services-online-course/>",
-            image: "<https://courses.cfte.education/wp-content/uploads/2025/10/Generative-AI.png>"
-        },
-        aiFinance: {
-            title: "AI in Finance Specialisation",
-            description: "You are focused on practical application within a specific, high-stakes domain. This specialisation is perfectly designed to bridge your financial expertise with cutting-edge AI techniques to drive value and innovation.",
-            link: "<https://courses.cfte.education/ai-in-finance-specialisation/>",
-            image: "<https://courses.cfte.education/wp-content/uploads/2025/10/AI-in-Finance-Specialisation.png>"
-        },
-        aiLiteracy: {
-            title: "AI Literacy for Professionals",
-            description: "Your responses indicate a focus on strategy, leadership, and the 'big picture'. This programme is tailored to equip you with the essential knowledge to lead, make informed decisions, and drive AI strategy without getting lost in the technical weeds.",
-            link: "<https://courses.cfte.education/executive-ai-certification-level-1-foundation/>",
-            image: "<https://courses.cfte.education/wp-content/uploads/2025/05/ai-literacy-for-professionals-course-page.jpg>"
-        }
-    };
-
-    let currentQuestionIndex = 0;
-    let scores = { genai360: 0, aiFinance: 0, aiLiteracy: 0 };
-    const answerLabels = ['A', 'B', 'C'];
-
-    startBtn.addEventListener('click', startQuiz);
-
-    function startQuiz() {
-        startScreen.classList.add('hidden');
-        quizScreen.classList.remove('hidden');
-        displayQuestion();
-    }
-
-    function displayQuestion() {
-        const currentQuestion = quizData[currentQuestionIndex];
-        questionContainer.innerHTML = `
-            <div class="question-card">
-                <p class="text-sm cfte-red-text font-semibold mb-2">Question ${currentQuestionIndex + 1} of ${quizData.length}</p>
-                <h2 class="text-2xl md:text-3xl font-lora font-medium text-gray-900 mb-8">${currentQuestion.question}</h2>
-                <div class="space-y-4">
-                    ${currentQuestion.answers.map((answer, index) => `
-                        <button
-                            class="answer-option w-full text-left p-4 bg-white border-2 border-gray-200 rounded-lg flex items-center space-x-4"
-                            onclick="selectAnswer('${answer.course}')"
-                        >
-                            <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center cfte-red-border border-2 cfte-red-text font-bold rounded-md">${answerLabels[index]}</span>
-                            <span class="text-gray-700">${answer.text}</span>
-                        </button>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-        updateProgressBar();
-    }
-
-    function selectAnswer(course) {
-        scores[course]++;
-        currentQuestionIndex++;
-        const questionCard = questionContainer.querySelector('.question-card');
-        if (questionCard) {
-            questionCard.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
-            questionCard.style.opacity = '0';
-            questionCard.style.transform = 'translateX(-30px)';
-        }
-        setTimeout(() => {
-            if (currentQuestionIndex < quizData.length) {
-                displayQuestion();
-            } else {
-                updateProgressBar(); // final update before showing result
-                showResult();
-            }
-        }, 300);
-    }
-
-    function updateProgressBar() {
-        const progress = (currentQuestionIndex / quizData.length) * 100;
-        progressBar.style.width = `${progress}%`;
-        progressText.textContent = `${Math.round(progress)}%`;
-    }
-
-    function showResult() {
-        let maxScore = -1;
-        let resultCourse = '';
-        for (const course in scores) {
-            if (scores[course] > maxScore) {
-                maxScore = scores[course];
-                resultCourse = course;
-            }
-        }
-
-        const resultData = courseResults[resultCourse];
-        quizScreen.classList.add('hidden');
-        resultScreen.classList.remove('hidden');
-
-        resultScreen.innerHTML = `
-            <div class="result-card text-center">
-                <h2 class="font-lora text-xl text-gray-700 mb-2">Your Recommended Course Is:</h2>
-                <h3 class="text-3xl md:text-4xl font-bold font-lora cfte-red-text mb-6">${resultData.title}</h3>
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <img src="${resultData.image}" alt="${resultData.title}" class="w-full h-auto object-cover">
-                    <div class="p-6">
-                        <p class="text-gray-600 mb-6 text-base md:text-lg">${resultData.description}</p>
-                        <a href="${resultData.link}" target="_blank" class="inline-block cfte-red hover:bg-red-900 text-white font-bold py-3 px-10 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                            Learn More About This Course
-                        </a>
-                    </div>
-                </div>
-                <button id="restart-btn" class="mt-8 text-gray-500 hover:text-gray-800 font-semibold transition duration-300">
-                    Or Retake the Quiz
+        <main class="p-6 md:p-10 bg-gray-50">
+            <!-- Start Screen -->
+            <div id="start-screen" class="text-center">
+                <h2 class="font-lora text-2xl text-gray-800 mb-4">Ready to Begin?</h2>
+                <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto">This short quiz will help us recommend the ideal CFTE course for your career advancement in AI.</p>
+                <button id="start-btn" class="cfte-red hover:bg-red-900 text-white font-bold py-3 px-10 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg">
+                    Start Quiz
                 </button>
             </div>
-        `;
 
-        document.getElementById('restart-btn').addEventListener('click', () => {
-            currentQuestionIndex = 0;
-            scores = { genai360: 0, aiFinance: 0, aiLiteracy: 0 };
-            resultScreen.classList.add('hidden');
-            startScreen.classList.remove('hidden');
+            <!-- Quiz Questions -->
+            <div id="quiz-screen" class="hidden quiz-container">
+                <div id="question-container" class="mb-6">
+                    <!-- Question will be injected here -->
+                </div>
+                <div id="progress-container" class="flex items-center justify-between text-sm text-gray-500">
+                    <span>Progress</span>
+                    <div class="w-full mx-4 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="cfte-red h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <span id="progress-text">0%</span>
+                </div>
+            </div>
+
+            <!-- Result Screen -->
+            <div id="result-screen" class="hidden">
+                <!-- Result will be injected here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionContainer = document.getElementById('question-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+
+        // --- QUIZ DATA ---
+        const quizData = [
+            {
+                question: "When faced with a new technology, what is your first instinct?",
+                answers: [
+                    { text: "Experiment with it, see what I can build, and push its limits.", course: "genai360" },
+                    { text: "Analyse how it can optimise processes and create value in my specific field.", course: "aiFinance" },
+                    { text: "Understand its potential and risks to make strategic decisions for my organisation.", course: "aiLiteracy" }
+                ]
+            },
+            {
+                question: "How do you prefer to learn new concepts?",
+                answers: [
+                    { text: "By diving into the technical details to see how things work from the ground up.", course: "genai360" },
+                    { text: "Through real-world case studies and applications within my industry.", course: "aiFinance" },
+                    { text: "By grasping the big picture, strategic implications, and business impact.", course: "aiLiteracy" }
+                ]
+            },
+            {
+                question: "How would you describe your current technical expertise?",
+                answers: [
+                    { text: "I have some programming experience and am comfortable with technical concepts.", course: "genai360" },
+                    { text: "I have strong domain knowledge (e.g., in finance) but am not a programmer.", course: "aiFinance" },
+                    { text: "I'm a non-technical professional focused on strategy, leadership, or operations.", course: "aiLiteracy" }
+                ]
+            },
+            {
+                question: "Which of these sounds like the most engaging project for you?",
+                answers: [
+                    { text: "Fine-tuning a Large Language Model for a novel creative or analytical task.", course: "genai360" },
+                    { text: "Developing an AI-driven model for risk assessment or algorithmic trading.", course: "aiFinance" },
+                    { text: "Creating a company-wide framework for the ethical implementation of AI.", course: "aiLiteracy" }
+                ]
+            },
+             {
+                question: "What is your primary goal for learning about AI?",
+                answers: [
+                    { text: "To gain a deep, hands-on understanding of the latest AI models.", course: "genai360" },
+                    { text: "To master the application of AI to solve challenges in the financial sector.", course: "aiFinance" },
+                    { text: "To become a confident, AI-aware leader who can drive innovation.", course: "aiLiteracy" }
+                ]
+            },
+            {
+                question: "Looking ahead, what role do you see yourself playing in your company's AI journey?",
+                answers: [
+                    { text: "The hands-on builder or innovator creating new AI-powered tools.", course: "genai360" },
+                    { text: "The domain expert who identifies and implements high-value AI use cases in finance.", course: "aiFinance" },
+                    { text: "The strategic leader who guides the company's AI vision and governance.", course: "aiLiteracy" }
+                ]
+            }
+        ];
+
+        const courseResults = {
+            genai360: {
+                title: "Generative AI in Financial Services",
+                description: "Your profile suggests a strong interest in the technical foundations and hands-on application of AI. This course will give you the deep, practical knowledge needed to build and innovate with generative models.",
+                link: "https://courses.cfte.education/generative-ai-360-for-financial-services-online-course/",
+                image: "./images/generative-ai.png" 
+            },
+            aiFinance: {
+                title: "AI in Finance Specialisation",
+                description: "You are focused on practical application within a specific, high-stakes domain. This specialisation is perfectly designed to bridge your financial expertise with cutting-edge AI techniques to drive value and innovation.",
+                link: "https://courses.cfte.education/ai-in-finance-specialisation/",
+                image: "./images/ai-in-finance.png"
+            },
+            aiLiteracy: {
+                title: "AI Literacy for Professionals",
+                description: "Your responses indicate a focus on strategy, leadership, and the 'big picture'. This programme is tailored to equip you with the essential knowledge to lead, make informed decisions, and drive AI strategy without getting lost in the technical weeds.",
+                link: "https://courses.cfte.education/executive-ai-certification-level-1-foundation/",
+                image: "./images/ai-literacy.jpg"
+            }
+        };
+
+        let currentQuestionIndex = 0;
+        let scores = { genai360: 0, aiFinance: 0, aiLiteracy: 0 };
+        const answerLabels = ['A', 'B', 'C'];
+
+        startBtn.addEventListener('click', startQuiz);
+
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            questionContainer.innerHTML = `
+                <div class="question-card">
+                    <p class="text-sm cfte-red-text font-semibold mb-2">Question ${currentQuestionIndex + 1} of ${quizData.length}</p>
+                    <h2 class="text-2xl md:text-3xl font-lora font-medium text-gray-900 mb-8">${currentQuestion.question}</h2>
+                    <div class="space-y-4">
+                        ${currentQuestion.answers.map((answer, index) => `
+                            <button 
+                                class="answer-option w-full text-left p-4 bg-white border-2 border-gray-200 rounded-lg flex items-center space-x-4"
+                                onclick="selectAnswer('${answer.course}')"
+                            >
+                                <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center cfte-red-border border-2 cfte-red-text font-bold rounded-md">${answerLabels[index]}</span>
+                                <span class="text-gray-700">${answer.text}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
             updateProgressBar();
-        });
-    }
-</script>
+        }
 
-```
+        function selectAnswer(course) {
+            scores[course]++;
+            currentQuestionIndex++;
+            const questionCard = questionContainer.querySelector('.question-card');
+            if (questionCard) {
+                questionCard.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+                questionCard.style.opacity = '0';
+                questionCard.style.transform = 'translateX(-30px)';
+            }
+            setTimeout(() => {
+                if (currentQuestionIndex < quizData.length) {
+                    displayQuestion();
+                } else {
+                    updateProgressBar(); // final update before showing result
+                    showResult();
+                }
+            }, 300);
+        }
 
+        function updateProgressBar() {
+            const progress = (currentQuestionIndex / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+        }
+        
+        function showResult() {
+            let maxScore = -1;
+            let resultCourse = '';
+            for (const course in scores) {
+                if (scores[course] > maxScore) {
+                    maxScore = scores[course];
+                    resultCourse = course;
+                }
+            }
+
+            const resultData = courseResults[resultCourse];
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            resultScreen.innerHTML = `
+                <div class="result-card text-center">
+                    <h2 class="font-lora text-xl text-gray-700 mb-2">Your Recommended Course Is:</h2>
+                    <h3 class="text-3xl md:text-4xl font-bold font-lora cfte-red-text mb-6">${resultData.title}</h3>
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <img src="${resultData.image}" alt="${resultData.title}" class="w-full h-auto object-cover">
+                        <div class="p-6">
+                            <p class="text-gray-600 mb-6 text-base md:text-lg">${resultData.description}</p>
+                            <a href="${resultData.link}" target="_blank" class="inline-block cfte-red hover:bg-red-900 text-white font-bold py-3 px-10 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg">
+                                Learn More About This Course
+                            </a>
+                        </div>
+                    </div>
+                    <button id="restart-btn" class="mt-8 text-gray-500 hover:text-gray-800 font-semibold transition duration-300">
+                        Or Retake the Quiz
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('restart-btn').addEventListener('click', () => {
+                currentQuestionIndex = 0;
+                scores = { genai360: 0, aiFinance: 0, aiLiteracy: 0 };
+                resultScreen.classList.add('hidden');
+                startScreen.classList.remove('hidden');
+                updateProgressBar();
+            });
+        }
+    </script>
 </body>
 </html>
