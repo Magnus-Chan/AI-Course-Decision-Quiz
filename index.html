@@ -11,7 +11,23 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f0f0f0; /* Lighter grey background */
+            /* Using the full raw GitHub URL for the background */
+            background-image: url('https://raw.githubusercontent.com/Magnus-Chan/AI-Course-Decision-Quiz/main/images/CFTE5yrphoto.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        /* Adding a semi-transparent overlay to make the quiz card more readable */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Slightly darker for better contrast */
+            z-index: -1;
         }
         .font-lora {
             font-family: 'Lora', serif;
@@ -95,75 +111,61 @@
         const progressText = document.getElementById('progress-text');
 
         // --- QUIZ DATA ---
+        // Using the questions from your preferred version
         const quizData = [
             {
-                question: "When faced with a new technology, what is your first instinct?",
+                question: "What's your primary goal with AI?",
                 answers: [
-                    { text: "Experiment with it, see what I can build, and push its limits.", course: "genai360" },
-                    { text: "Analyse how it can optimise processes and create value in my specific field.", course: "aiFinance" },
-                    { text: "Understand its potential and risks to make strategic decisions for my organisation.", course: "aiLiteracy" }
-                ]
-            },
-            {
-                question: "How do you prefer to learn new concepts?",
-                answers: [
-                    { text: "By diving into the technical details to see how things work from the ground up.", course: "genai360" },
-                    { text: "Through real-world case studies and applications within my industry.", course: "aiFinance" },
-                    { text: "By grasping the big picture, strategic implications, and business impact.", course: "aiLiteracy" }
+                    { text: "Lead AI strategy and make informed business decisions.", course: "aiLiteracy" },
+                    { text: "Apply AI techniques to solve specific financial problems.", course: "aiFinance" },
+                    { text: "Build and innovate with the latest generative AI models.", course: "genai360" }
                 ]
             },
             {
                 question: "How would you describe your current technical expertise?",
                 answers: [
-                    { text: "I have some programming experience and am comfortable with technical concepts.", course: "genai360" },
-                    { text: "I have strong domain knowledge (e.g., in finance) but am not a programmer.", course: "aiFinance" },
-                    { text: "I'm a non-technical professional focused on strategy, leadership, or operations.", course: "aiLiteracy" }
+                    { text: "Beginner: I'm new to the technical side of AI.", course: "aiLiteracy" },
+                    { text: "Intermediate: I understand core concepts and have some experience.", course: "aiFinance" },
+                    { text: "Advanced: I'm a developer, data scientist, or have a strong technical background.", course: "genai360" }
                 ]
             },
             {
-                question: "Which of these sounds like the most engaging project for you?",
+                question: "Which of these topics excites you the most?",
                 answers: [
-                    { text: "Fine-tuning a Large Language Model for a novel creative or analytical task.", course: "genai360" },
-                    { text: "Developing an AI-driven model for risk assessment or algorithmic trading.", course: "aiFinance" },
-                    { text: "Creating a company-wide framework for the ethical implementation of AI.", course: "aiLiteracy" }
+                    { text: "The future of work and AI's impact on business models.", course: "aiLiteracy" },
+                    { text: "Using AI for risk management, trading, and asset allocation.", course: "aiFinance" },
+                    { text: "Fine-tuning Large Language Models (LLMs) and prompt engineering.", course: "genai360" }
                 ]
             },
              {
-                question: "What is your primary goal for learning about AI?",
+                question: "When you think about implementing AI, what is your primary focus?",
                 answers: [
-                    { text: "To gain a deep, hands-on understanding of the latest AI models.", course: "genai360" },
-                    { text: "To master the application of AI to solve challenges in the financial sector.", course: "aiFinance" },
-                    { text: "To become a confident, AI-aware leader who can drive innovation.", course: "aiLiteracy" }
-                ]
-            },
-            {
-                question: "Looking ahead, what role do you see yourself playing in your company's AI journey?",
-                answers: [
-                    { text: "The hands-on builder or innovator creating new AI-powered tools.", course: "genai360" },
-                    { text: "The domain expert who identifies and implements high-value AI use cases in finance.", course: "aiFinance" },
-                    { text: "The strategic leader who guides the company's AI vision and governance.", course: "aiLiteracy" }
+                    { text: "Understanding the 'art of the possible' and identifying strategic opportunities.", course: "aiLiteracy" },
+                    { text: "Optimising existing processes and creating efficiencies within my department.", course: "aiFinance" },
+                    { text: "Developing new products and capabilities powered by AI.", course: "genai360" }
                 ]
             }
         ];
-
+        
+        // Using the correct full image URLs
         const courseResults = {
             genai360: {
                 title: "Generative AI in Financial Services",
                 description: "Your profile suggests a strong interest in the technical foundations and hands-on application of AI. This course will give you the deep, practical knowledge needed to build and innovate with generative models.",
                 link: "https://courses.cfte.education/generative-ai-360-for-financial-services-online-course/",
-                image: "./images/generative-ai.png" 
+                image: "https://raw.githubusercontent.com/Magnus-Chan/AI-Course-Decision-Quiz/main/images/course-genai.png" 
             },
             aiFinance: {
                 title: "AI in Finance Specialisation",
                 description: "You are focused on practical application within a specific, high-stakes domain. This specialisation is perfectly designed to bridge your financial expertise with cutting-edge AI techniques to drive value and innovation.",
                 link: "https://courses.cfte.education/ai-in-finance-specialisation/",
-                image: "./images/ai-in-finance.png"
+                image: "https://raw.githubusercontent.com/Magnus-Chan/AI-Course-Decision-Quiz/main/images/course-aif.png"
             },
             aiLiteracy: {
                 title: "AI Literacy for Professionals",
                 description: "Your responses indicate a focus on strategy, leadership, and the 'big picture'. This programme is tailored to equip you with the essential knowledge to lead, make informed decisions, and drive AI strategy without getting lost in the technical weeds.",
                 link: "https://courses.cfte.education/executive-ai-certification-level-1-foundation/",
-                image: "./images/ai-literacy.jpg"
+                image: "https://raw.githubusercontent.com/Magnus-Chan/AI-Course-Decision-Quiz/main/images/course-ail.png"
             }
         };
 
@@ -229,12 +231,23 @@
         function showResult() {
             let maxScore = -1;
             let resultCourse = '';
+            // Tie-breaking: if scores are equal, default to a general course like aiLiteracy
+            let topCourses = [];
             for (const course in scores) {
                 if (scores[course] > maxScore) {
                     maxScore = scores[course];
-                    resultCourse = course;
+                    topCourses = [course];
+                } else if (scores[course] === maxScore) {
+                    topCourses.push(course);
                 }
             }
+            
+            if (topCourses.length > 1 && topCourses.includes('aiLiteracy')) {
+                 resultCourse = 'aiLiteracy';
+            } else {
+                 resultCourse = topCourses[0];
+            }
+
 
             const resultData = courseResults[resultCourse];
             quizScreen.classList.add('hidden');
