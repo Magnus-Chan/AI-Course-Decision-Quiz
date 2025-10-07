@@ -71,17 +71,8 @@
         </header>
 
         <main class="p-6 md:p-10 bg-gray-50">
-            <!-- Start Screen -->
-            <div id="start-screen" class="text-center">
-                <h2 class="font-lora text-2xl text-gray-800 mb-4">Ready to Begin?</h2>
-                <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto">This short quiz will help us recommend the ideal CFTE course for your career advancement in AI.</p>
-                <button id="start-btn" class="cfte-red hover:bg-red-900 text-white font-bold py-3 px-10 rounded-full text-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                    Start Quiz
-                </button>
-            </div>
-
             <!-- Quiz Questions -->
-            <div id="quiz-screen" class="hidden quiz-container">
+            <div id="quiz-screen" class="quiz-container">
                 <div id="question-container" class="mb-6">
                     <!-- Question will be injected here -->
                 </div>
@@ -102,8 +93,6 @@
     </div>
 
     <script>
-        const startBtn = document.getElementById('start-btn');
-        const startScreen = document.getElementById('start-screen');
         const quizScreen = document.getElementById('quiz-screen');
         const resultScreen = document.getElementById('result-screen');
         const questionContainer = document.getElementById('question-container');
@@ -179,14 +168,6 @@
         let currentQuestionIndex = 0;
         let scores = { genai360: 0, aiFinance: 0, aiLiteracy: 0 };
         const answerLabels = ['A', 'B', 'C'];
-
-        startBtn.addEventListener('click', startQuiz);
-
-        function startQuiz() {
-            startScreen.classList.add('hidden');
-            quizScreen.classList.remove('hidden');
-            displayQuestion();
-        }
 
         function displayQuestion() {
             const currentQuestion = quizData[currentQuestionIndex];
@@ -286,10 +267,14 @@
                 currentQuestionIndex = 0;
                 scores = { genai360: 0, aiFinance: 0, aiLiteracy: 0 };
                 resultScreen.classList.add('hidden');
-                startScreen.classList.remove('hidden');
-                updateProgressBar();
+                resultScreen.innerHTML = ''; // Clear the results
+                quizScreen.classList.remove('hidden');
+                displayQuestion();
             });
         }
+
+        // Start the quiz as soon as the page loads
+        displayQuestion();
     </script>
 </body>
 </html>
