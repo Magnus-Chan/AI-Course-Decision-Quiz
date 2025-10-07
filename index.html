@@ -111,7 +111,6 @@
         const progressText = document.getElementById('progress-text');
 
         // --- QUIZ DATA ---
-        // Using the questions from your preferred version
         const quizData = [
             {
                 question: "What's your primary goal with AI?",
@@ -119,14 +118,6 @@
                     { text: "Lead AI strategy and make informed business decisions.", course: "aiLiteracy" },
                     { text: "Apply AI techniques to solve specific financial problems.", course: "aiFinance" },
                     { text: "Build and innovate with the latest generative AI models.", course: "genai360" }
-                ]
-            },
-            {
-                question: "How would you describe your current technical expertise?",
-                answers: [
-                    { text: "Beginner: I'm new to the technical side of AI.", course: "aiLiteracy" },
-                    { text: "Intermediate: I understand core concepts and have some experience.", course: "aiFinance" },
-                    { text: "Advanced: I'm a developer, data scientist, or have a strong technical background.", course: "genai360" }
                 ]
             },
             {
@@ -143,6 +134,22 @@
                     { text: "Understanding the 'art of the possible' and identifying strategic opportunities.", course: "aiLiteracy" },
                     { text: "Optimising existing processes and creating efficiencies within my department.", course: "aiFinance" },
                     { text: "Developing new products and capabilities powered by AI.", course: "genai360" }
+                ]
+            },
+            {
+                question: "What outcome would make this course a success for you?",
+                answers: [
+                    { text: "Being able to confidently discuss AI strategy and trends.", course: "aiLiteracy" },
+                    { text: "Being able to identify and implement AI use cases in finance.", course: "aiFinance" },
+                    { text: "Being able to use generative AI tools to enhance innovation and productivity.", course: "genai360" }
+                ]
+            },
+            {
+                question: "What challenge are you most looking to solve with AI?",
+                answers: [
+                    { text: "Understanding opportunities and risks at a strategic level.", course: "aiLiteracy" },
+                    { text: "Finding better ways to analyse data and make decisions.", course: "aiFinance" },
+                    { text: "Enhancing creativity and innovation with AI-powered tools.", course: "genai360" }
                 ]
             }
         ];
@@ -244,7 +251,10 @@
             
             if (topCourses.length > 1 && topCourses.includes('aiLiteracy')) {
                  resultCourse = 'aiLiteracy';
-            } else {
+            } else if (topCourses.length > 1 && topCourses.includes('aiFinance')) {
+                 resultCourse = 'aiFinance';
+            }
+             else {
                  resultCourse = topCourses[0];
             }
 
